@@ -29,13 +29,11 @@ class GetWebSiteDom {
 
 		var characterStr = character || 'GBK'//'utf8'
 
-		//var gs = require('nodegrass');
-		var iconv = require('iconv-lite');
 		var http = require('http')
 		//
 		var nodegrass = require('nodegrass');
 		nodegrass.get(this.siteUrl,function(data,status,headers){
-			//console.log(status);
+			console.log(status);
 			//console.log(headers);
 			//console.log(data);
 

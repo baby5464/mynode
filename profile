@@ -7,3 +7,7 @@ fi
 if [ "${BASH-no}" != "no" ]; then
 	[ -r /etc/bashrc ] && . /etc/bashrc
 fi
+
+
+export NODE_HOME=/usr/local/lib/node_modules
+export NODE_PATH=$NODE_HOME:$NODE_HOME/lib/node_modules

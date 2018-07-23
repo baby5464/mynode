@@ -1,5 +1,7 @@
 
 
+console.log("[ main.js ] start ....")
+
 var Promise = require('es6-promise').Promise
 //转编码
 var iconv = require('iconv-lite')
@@ -11,6 +13,7 @@ var file = new QtFile()
 
 //日期输出函数
 var timeFormatStr = new Date().format("yyyyMMdd-hhmmss")
+
 
 
 //获取网站源码
@@ -30,6 +33,7 @@ var distPath = "./../dist/q-"+timeFormatStr+".txt";
 //file.save(fileContent, distPath, function(){
 //	Q.log("ok");
 //})
+
 
 
 function promiseGetWebDom(webUrlPath, characterStr){
@@ -54,7 +58,6 @@ promiseGetWebDom(webUrlPath, 'UTF8')
 	return promiseGetWebDom(webUrlPath2)
 })
 .then(function(data){
-	
 	
 	return promiseGetWebDom(webUrlPath3)
 })
