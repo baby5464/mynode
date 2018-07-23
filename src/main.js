@@ -65,33 +65,7 @@ promiseGetWebDom(webUrlPath, 'UTF8')
 	
 })
 
-// var ps = new Promise(function(resolve, reject){
-// 	getWebSiteDomObj.catch(function(htmlDom){
-// 		resolve(htmlDom)
-// 	})
-// }).then(function(data){
 
-// 	console.log(data)
-
-// })
-
-/*
-getWebSiteDomObj.catch(function(htmlDom){
-	
-	var $ = getWebSiteDomObj.paraseDom(htmlDom)
-
-	var $main = $('.course-chapters')
-
-	$main.each(function(item){
-
-		var $el = $(this)
-		var title = $el.find('h3').text()
-		console.log(title)
-
-	})
-
-})
-*/
 
 /*
 fs.readFile("./../files/QtFile.js", (error, data) => {
@@ -106,17 +80,3 @@ fs.readFile("./../files/QtFile.js", (error, data) => {
 
 })
 */
-
-//Q.log(QtFile)
-
-
-
-/*
-Q.log(timeFormatStr);
-Q.log("qiter");
-
-Q.log(QtFile.showCurrentPath());
-
-Q.log(file.exist("1.jpg"));
-*/
-
