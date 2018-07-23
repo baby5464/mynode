@@ -35,10 +35,10 @@ class QtFile
 	}
 
 
-	//创建文件对象
+	//
 
 
-	//读取文件
+	//read file
 	readFile(path, callback){
 		var fs = require('fs');
 		fs.readFile(path, (error, data) => {
@@ -51,7 +51,7 @@ class QtFile
 		return fs.readFileSync(path);
 	}
 	
-	//检测文件或者文件夹存在 nodeJS
+	//check file is file or folder
 	exist(path) {
 		try{
 			var fs = require('fs'); 
@@ -62,7 +62,58 @@ class QtFile
 		return true;
 	}
 	
-	//保存文件到指定目录
+	//read folder
+	readFolder(path) {
+		var _this = this
+		var fs = require('fs')
+	    var files = fs.readdirSync(path) //需要用到同步读取 
+	    files.forEach(eachFolder)
+
+	    function eachFolder(fileName){
+	    	
+	    	var states = fs.statSync(path + '/' + fileName)
+	    	if (states.isDirectory()) {
+	            
+	    		_this.readFolder(path + '/' + fileName)
+	    		
+	        }else{
+
+	        	_this.readFile(path + '/' + fileName, (error, data) => {
+					
+					//console.log(path + '/' + fileName)
+					
+					var obj = new Object()
+		            obj.size = states.size//文件大小，以字节为单位 
+		            obj.name = fileName;//文件名 
+		            obj.path = path + '/' + fileName //文件绝对路径 
+		            //filesList.push(obj);
+		            console.log(obj)
+
+		            //_this.writeFile(fileName,data)
+
+				})
+
+	        }
+	    
+	    }
+
+	    
+	}
+
+	//写入文件utf-8格式 
+	//_this.writeFile(fileName,data)
+	writeFile(fileName, data) {
+		var fs = require('fs')
+	    fs.writeFile(fileName, data, 'utf-8', complete);
+	    function complete() {
+	        console.log(fileName+"-文件生成成功");
+	    }
+	}
+
+
+
+
+	//save file to path
 
 	save(__fileContent,__path,__callBackFun){
 

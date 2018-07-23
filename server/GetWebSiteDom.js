@@ -33,10 +33,9 @@ class GetWebSiteDom {
 		//
 		var nodegrass = require('nodegrass');
 		nodegrass.get(this.siteUrl,function(data,status,headers){
-			console.log(status);
+			//console.log(status);
 			//console.log(headers);
 			//console.log(data);
-
 			callback(data) 
 
 		},null,characterStr.toLowerCase()).on('error', function(e) {
