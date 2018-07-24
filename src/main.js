@@ -24,11 +24,8 @@ var GetWebSiteDom = require('./../server/GetWebSiteDom.js')
 var webUrlPath = 'http://www.imooc.com/learn/348'
 var webUrlPath2 = 'http://qq.ip138.com/weather/beijing/'
 var webUrlPath3 = 'http://www.qq.com'
-
-
-
-
-
+var webUrlPath4 = 'http://www.4399.com'
+var webUrlPath5 = 'http://www.people.com.cn'
 
 var fileContent = timeFormatStr+" qiter text";
 var distPath = "./../dist/q-"+timeFormatStr+".txt";
@@ -61,6 +58,12 @@ promiseGetWebDom(webUrlPath, 'UTF8')
 })
 .then(function(data){
 	return promiseGetWebDom(webUrlPath3)
+})
+.then(function(data){
+	return promiseGetWebDom(webUrlPath4)
+})
+.then(function(data){
+	return promiseGetWebDom(webUrlPath5)
 })
 .then(function(data){
 	Q.log("-------------------")

@@ -62,43 +62,182 @@ class QtFile
 		return true;
 	}
 	
-	//read folder
-	readFolder(path) {
-		var _this = this
-		var fs = require('fs')
-	    var files = fs.readdirSync(path) //需要用到同步读取 
-	    files.forEach(eachFolder)
 
+
+
+
+	/*
+	
+	遍历获取文件夹内，全部文件夹名称
+
+	参数：
+	path:路径
+
+	return 获取文件夹路径，总数组
+	example:
+		
+		[ './../../mp3//张信哲2010年新歌/qiter-folder',
+		  './../../mp3//张信哲2010年新歌/qt-soft/msoutlook',
+		  './../../mp3//张信哲2010年新歌/qt-soft/qiter-folder',
+		  './../../mp3//张信哲2010年新歌/qt-soft',
+		  './../../mp3//张信哲2010年新歌' ]
+	
+	*/
+
+	getFolderTotal(path){
+		var _this = this
+		if (!this.exist(path)) {
+			//空文件夹
+			console.log("[===Not find file or folder====]\n"+path)
+			return
+		}
+		var folderListNameArr = []
+		eachFolderHandler(path)
+		function eachFolderHandler(path){
+			if (!_this.exist(path)) {
+				console.log("[===Not find file or folder====]\n"+path)
+				return
+			}
+			var fs = require('fs')
+		    var files = fs.readdirSync(path)
+		    files.forEach(eachFolder)
+		    function eachFolder(fileName){
+		    	var pathStr = path + '/' + fileName
+		    	var states = fs.statSync(pathStr)
+		    	if (states.isDirectory()) {
+		            eachFolderHandler(pathStr)
+		            folderListNameArr.push(pathStr)
+		        }
+		    }
+		}
+		return folderListNameArr
+	}
+
+
+
+	/*
+	
+	功能: 遍历当前文件夹所有文件
+
+	return 数组（文件夹中所有文件名，保存在数组中）
+	
+	*/
+	readFolderAllFilesName(path) {
+
+		var _this = this
+		if (!this.exist(path)) {
+			//空文件夹
+			console.log("[===Not find file or folder====]\n"+path)
+			return
+		}
+
+		var fileNameArr = []
+
+		var fs = require('fs')
+	    var files = fs.readdirSync(path)
+
+	    var fileTotal = files.length
+
+	    //console.log("fileTotal-----:"+fileTotal)
+
+	    files.forEach(eachFolder)
+	    //
 	    function eachFolder(fileName){
-	    	
-	    	var states = fs.statSync(path + '/' + fileName)
+	    	var pathStr = path + '/' + fileName
+	    	var states = fs.statSync(pathStr)
 	    	if (states.isDirectory()) {
-	            
-	    		_this.readFolder(path + '/' + fileName)
-	    		
+	            //folderTotal++
+	    		//_this.readFolder(pathStr)
 	        }else{
 
-	        	_this.readFile(path + '/' + fileName, (error, data) => {
-					
-					//console.log(path + '/' + fileName)
-					
-					var obj = new Object()
-		            obj.size = states.size//文件大小，以字节为单位 
-		            obj.name = fileName;//文件名 
-		            obj.path = path + '/' + fileName //文件绝对路径 
-		            //filesList.push(obj);
-		            console.log(obj)
+	        	if (typeof pathStr === 'string'){
+	        		fileNameArr.push(pathStr)
+	        	}
 
-		            //_this.writeFile(fileName,data)
 
-				})
+	   //      	_this.readFile(pathStr, (error, data) => {
+					
+					
+
+				// 	var obj = {}
+		  //           obj.size = states.size
+		  //           obj.name = fileName
+		  //           obj.path = pathStr
+
+		  //           console.log(fileListArr.length+"---"+fileName)
+
+		  //           //_this.writeFile(fileName,data)
+
+
+		  //           fileListArr.push(obj)
+
+		  //           //console.log("fileCurrent:"+fileListArr.length)
+		            
+
+
+				// })
 
 	        }
 	    
-	    }
+	    }//end eachFolder
+	    //
+
+
+	    return fileNameArr
 
 	    
 	}
+
+
+
+	/**
+	* 
+
+	用途: 遍历获取 文件夹中全部文件（包括二级文件夹中的文件）
+	
+	return: 全部文件名数组
+
+	*
+	*/
+
+	getFolderAllFilesName ( pathUrl ) {
+		var _this = this
+		if (!this.exist(pathUrl)) {
+			//空文件夹
+			console.log("[===Not find file or folder====]\n"+pathUrl)
+			return
+		}
+		var fileListNameArr = []
+		var path = require("path")
+		var filesArr = this.readFolderAllFilesName(pathUrl)
+		for( var i in filesArr){
+			var filePath = filesArr[i]
+			if (typeof filePath === 'string'){
+
+				var pathObj = path.parse(filePath)
+				
+				if(pathObj.ext === '.mp3'){
+					var fileData = _this.readFileSync(filePath)
+					//console.log(pathObj.base)
+
+					// fileData.forEach(eachFolder)
+				 //    //
+				 //    function eachFolder(fileName){
+				 //    	//var pathStr = path + '/' + fileName
+				 //    	var states = fileData.statSync(filePath)
+				 //    	console.log(states)
+				 //    }
+					
+					fileListNameArr.push(filePath)
+
+				}
+
+			}
+		}
+
+	}
+
+
 
 	//写入文件utf-8格式 
 	//_this.writeFile(fileName,data)
