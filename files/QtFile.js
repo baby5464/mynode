@@ -70,6 +70,8 @@ class QtFile
 	
 	遍历获取文件夹内，全部文件夹名称
 
+	说明：获取 全部文件夹路径数组
+
 	参数：
 	path:路径
 
@@ -84,7 +86,7 @@ class QtFile
 	
 	*/
 
-	getFolderTotal(path){
+	getFolderAllFolderNameArr(path){
 		var _this = this
 		if (!this.exist(path)) {
 			//空文件夹
@@ -193,7 +195,7 @@ class QtFile
 	/**
 	* 
 
-	用途: 遍历获取 文件夹中全部文件（包括二级文件夹中的文件）
+	用途: 遍历获取 文件夹中全部 (带有路径的)文件名
 	
 	return: 全部文件名数组
 
@@ -203,7 +205,7 @@ class QtFile
 	getFolderAllFilesName ( pathUrl ) {
 		var _this = this
 		if (!this.exist(pathUrl)) {
-			//空文件夹
+			//no folder
 			console.log("[===Not find file or folder====]\n"+pathUrl)
 			return
 		}
@@ -216,24 +218,34 @@ class QtFile
 
 				var pathObj = path.parse(filePath)
 				
-				if(pathObj.ext === '.mp3'){
-					var fileData = _this.readFileSync(filePath)
-					//console.log(pathObj.base)
-
-					// fileData.forEach(eachFolder)
-				 //    //
-				 //    function eachFolder(fileName){
-				 //    	//var pathStr = path + '/' + fileName
-				 //    	var states = fileData.statSync(filePath)
-				 //    	console.log(states)
-				 //    }
-					
+				//if(pathObj.ext === '.mp3'){
+					//var fileData = _this.readFileSync(filePath)
+					//console.log(fileData)
 					fileListNameArr.push(filePath)
 
-				}
+				//}
 
 			}
 		}
+		return fileListNameArr
+
+	}
+
+
+
+	/*
+
+	用途: 获取文件夹中，全部文件名，深度遍历所有文件夹
+
+	*/
+
+	getFolderInFolderAllFilesName(pathUrl){
+		var folderListArr = this.getFolderAllFolderNameArr(pathUrl)
+		for(var i in folderListArr){
+			var fileArr = this.getFolderAllFilesName(folderListArr[i])
+			console.log(fileArr)
+		}
+
 
 	}
 
