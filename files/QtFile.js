@@ -10,6 +10,74 @@ var data = iconv.decode(Buffer.from(bufferdata), 'GBK');
 Q.log(data);
 
 
+//-------------------------------
+
+功能：检测路径 是否是文件夹
+
+var mp3FolderPath = "./../../mp3/"
+var isDir = file.isDirectory(mp3FolderPath)
+Q.log(isDir)
+
+//-------------------------------
+功能：检测文件，或者文件夹，是否存在
+
+
+
+var mp3FolderPath = "./../../mp3/"
+var isExist = file.exist(mp3FolderPath)
+Q.log(isExist)
+//-------------------------------
+
+
+功能: 
+
+获取文件夹内，所有文件的文件名。 一层文件名。不包含子文件夹
+
+返回：
+
+文件名数组
+
+var mp3FolderPath = "./../../mp3/"
+var fileNameArr = file.getOneFolderFilesName(mp3FolderPath)
+Q.log(fileNameArr)
+
+//-------------------------------
+
+功能: 
+
+获取 文件夹内，全部文件名。。。包括子目录内的文件名称
+
+返回： 
+
+文件名数组
+
+example code:
+
+var mp3FolderPath = "./../../mp3/"
+var folderAllFileNameArr = file.getFolderInFolderAllFilesName(mp3FolderPath)
+Q.log(folderAllFileNameArr)
+
+//-------------------------------
+功能: 
+
+获取全部文件夹路径，包括子目录文件夹路径
+
+返回： 
+
+文件夹名称数组
+
+var mp3FolderPath = "./../../mp3/"
+var folderListArr = file.getFolderAllFolderNameArr(mp3FolderPath)
+Q.log(folderListArr)
+
+
+//-------------------------------
+
+
+
+
+
+//-------------------------------
 */
 class QtFile
 {
@@ -51,6 +119,53 @@ class QtFile
 		return fs.readFileSync(path);
 	}
 	
+
+	getFileStatSync( pathStr ){
+		var _this = this
+		if (!this.isDirectory(pathStr)) {
+			return
+		}
+		//------------------
+		var fs = require('fs')
+		var path = require('path')
+		var states = fs.statSync(pathStr)
+		if(states.isDirectory()){
+			console.log("[=== Warning is folder  not files ====]\n"+pathStr)
+			return undefined
+		}else{
+			var pathObj = path.parse(pathStr)
+			//获取路径：path.dirname(__path)
+			//获取文件名：path.basename(__path)
+			//获取扩展名：path.extname(__path)
+			return {
+				path:pathStr,
+				name:pathObj.base,
+				ext:pathObj.ext,
+				size:states.size
+			}
+
+		}
+		
+
+	}
+
+	isDirectory( pathStr ){
+		var _this = this
+		if (!this.exist(pathStr)) {
+			//空文件夹
+			console.log("[===Not find file or folder====]\n"+pathStr)
+			return
+		}
+		try{
+			var fs = require('fs'); 
+			var states = fs.statSync(pathStr)
+			states.isDirectory()
+		}catch(e){
+			return false;
+		}
+		return true;
+	}
+
 	//check file is file or folder
 	exist(path) {
 		try{
@@ -86,7 +201,7 @@ class QtFile
 	
 	*/
 
-	getFolderAllFolderNameArr(path){
+	getFolderAllFolderNameArr( path ){
 		var _this = this
 		if (!this.exist(path)) {
 			//空文件夹
@@ -94,6 +209,7 @@ class QtFile
 			return
 		}
 		var folderListNameArr = []
+		folderListNameArr.push(path)
 		eachFolderHandler(path)
 		function eachFolderHandler(path){
 			if (!_this.exist(path)) {
@@ -124,7 +240,7 @@ class QtFile
 	return 数组（文件夹中所有文件名，保存在数组中）
 	
 	*/
-	readFolderAllFilesName(path) {
+	getOneFolderFilesName(path) {
 
 		var _this = this
 		if (!this.exist(path)) {
@@ -211,19 +327,13 @@ class QtFile
 		}
 		var fileListNameArr = []
 		var path = require("path")
-		var filesArr = this.readFolderAllFilesName(pathUrl)
+		var filesArr = this.getOneFolderFilesName(pathUrl)
 		for( var i in filesArr){
 			var filePath = filesArr[i]
 			if (typeof filePath === 'string'){
 
 				var pathObj = path.parse(filePath)
-				
-				//if(pathObj.ext === '.mp3'){
-					//var fileData = _this.readFileSync(filePath)
-					//console.log(fileData)
-					fileListNameArr.push(filePath)
-
-				//}
+				fileListNameArr.push(filePath)
 
 			}
 		}
@@ -240,13 +350,17 @@ class QtFile
 	*/
 
 	getFolderInFolderAllFilesName(pathUrl){
+		var fileNameStr = ''
+		var signStr = ','
 		var folderListArr = this.getFolderAllFolderNameArr(pathUrl)
 		for(var i in folderListArr){
 			var fileArr = this.getFolderAllFilesName(folderListArr[i])
-			console.log(fileArr)
+			if(fileArr.length>0){
+				var fileNameString = fileArr.join(",")
+				fileNameStr += fileNameString + signStr
+			}
 		}
-
-
+		return fileNameStr.substring(0,fileNameStr.length-1).split(",")
 	}
 
 
@@ -262,67 +376,27 @@ class QtFile
 	}
 
 
-
-
 	//save file to path
-
-	save(__fileContent,__path,__callBackFun){
-
-		
-
-		var path = require('path');
-		var fs = require('fs'); 
-
+	save(__fileContent, __path, __callBackFun){
+		var path = require('path')
+		var fs = require('fs')
 		//获取路径：path.dirname(__path)
 		//获取文件名：path.basename(__path)
 		//获取扩展名：path.extname(__path)
-		//console.log( path.dirname(__path) );
-		//console.log( __path );
+		//console.log( path.dirname(__path) )
+		//console.log( __path )
 		//
-		
-
-		var fileFolderName = path.dirname(__path);
-		var fileName = path.basename(__path);
-		var siff = path.extname(__path);
-		//----------------------------------------
-		//var stat = fs.Stats(fileFolderName+ '\\' +fileName);
-		//console.log(fileFolderName+ '\\' +fileName)
-
-		
-		//console.log("is exist:"+this.exist(__path))
-		//console.log(stat.isDirectory())
-		//console.log(this.exist(path.dirname(__path)));
-		//true为文件夹
-		//console.log(path.dirname(__path))	
-		//console.log(__path);
-		//fs.mkdirSync(path.dirname(__path));
-		//fs.mkdirSync(fileFolderName);
-		//return;
-
-		if (this.exist(__path)) {
-			//如果存在，清空文件夹
-				
-
-		} else {
-			//如果不存在，创建文件夹
-			
-			//fs.mkdirSync(path.dirname(__path));
-
-		}
-		
-		//
+		var fileFolderName = path.dirname(__path)
+		var fileName = path.basename(__path)
+		var siff = path.extname(__path)
 		fs.writeFile(
 			__path,
 			__fileContent,
 			function (err) {
-				//
-				if (err) throw err ;
-				//
-				__callBackFun();
-				//
-				console.log("[save file]:"+__path);
+				__callBackFun()
+				console.log("[save file]:"+__path)
 			}
-		);
+		)
 	}
 
 	
@@ -330,5 +404,5 @@ class QtFile
 	
 
 }
-//QtFile.dir = __dirname;
+
 module.exports = QtFile;

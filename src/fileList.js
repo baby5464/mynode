@@ -16,48 +16,40 @@ var timeFormatStr = new Date().format("yyyyMMdd-hhmmss")
 //--------------------------------
 
 var mp3FolderPath = "./../../mp3/"
-//var mp3FolderPath = "./../../mynode/"
-//file.readFolder(mp3FolderPath)
+//var mp3FolderPath = "./../../racer/"
+
+// var isExist = file.exist(mp3FolderPath)
+// Q.log(isExist)
 
 
+//获取文件内容对象
+// var fileInfoObj = file.getFileStatSync(mp3FolderPath+'下载说明.txt')
+// Q.log(fileInfoObj)
 
-//首先获取 全部文件夹路径数组
-var folderListArr = file.getFolderAllFolderNameArr(mp3FolderPath)
-Q.log("获取 全部文件夹路径数组")
-Q.log(folderListArr)
-Q.log("--------------------")
-
-
+// var isDir = file.isDirectory(mp3FolderPath)
+// Q.log(isDir)
 
 
-//文件夹中 全部文件
-// var filesArr = file.readFolderAllFilesName(mp3FolderPath)
-// for( var i in filesArr){
-// 	var filePath = filesArr[i]
-// 	if (typeof filePath === 'string'){
-// 		var pathObj = path.parse(filePath)
-		
-// 		if(pathObj.ext === '.mp3'){
-// 			var fileData = file.readFileSync(filePath)
-// 			//Q.log(fileData)
-// 			//Q.log(pathObj.base)
-// 		}
+//获取文件夹 一层文件名。不包含子文件夹
+// var fileNameArr = file.getOneFolderFilesName(mp3FolderPath)
+// Q.log(fileNameArr)
+
+//获取 全部 文件夹 路径数组
+// var folderListArr = file.getFolderAllFolderNameArr(mp3FolderPath)
+// Q.log("获取 全部文件夹路径数组")
+// Q.log(folderListArr)
+// Q.log("--------------------")
 
 
-// 		//Q.log(pathObj)
-// 		//Q.log(fileName)
-// 	}
-// }
-
-file.getFolderInFolderAllFilesName(mp3FolderPath)
+//获取 全部 文件名 路径数组
+var folderAllFileNameArr = file.getFolderInFolderAllFilesName(mp3FolderPath)
+Q.log(folderAllFileNameArr)
 
 
-
-//var arr = [0,0,0,3,4,5,6,7,8,9,0]
-
-//var b = arr.unique()
-
-//Q.log(b)
+var saveTxtStr = folderAllFileNameArr
+file.save(JSON.stringify(saveTxtStr), "./../../mynode/dist.txt", ()=>{
+	Q.log(saveTxtStr)
+})
 
 
 
