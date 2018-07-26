@@ -47,7 +47,7 @@ Q.log(folderAllFileNameArr)
 
 
 var saveTxtStr = folderAllFileNameArr
-file.save(JSON.stringify(saveTxtStr), "./../../mynode/dist.txt", ()=>{
+file.save(JSON.stringify(saveTxtStr), "./../../mynode/dist/dist.txt", ()=>{
 	Q.log(saveTxtStr)
 })
 
