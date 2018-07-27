@@ -380,11 +380,8 @@ class QtFile
 	save(fileData, pathUrl, callBack){
 		var path = require('path')
 		var fs = require('fs')
-		//获取路径：path.dirname(pathUrl)
-		//获取文件名：path.basename(pathUrl)
-		//获取扩展名：path.extname(pathUrl)
-		//console.log( path.dirname(pathUrl) )
-		//console.log( pathUrl )
+		//var pathObj = path.parse(pathUrl)
+		//console.log( pathObj )
 
 		var pathObj = path.parse(pathUrl)
 		var isHaveFolder = this.exist(pathObj.dir)
