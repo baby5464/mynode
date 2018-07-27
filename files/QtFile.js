@@ -272,29 +272,6 @@ class QtFile
 	        		fileNameArr.push(pathStr)
 	        	}
 
-
-	   //      	_this.readFile(pathStr, (error, data) => {
-					
-					
-
-				// 	var obj = {}
-		  //           obj.size = states.size
-		  //           obj.name = fileName
-		  //           obj.path = pathStr
-
-		  //           console.log(fileListArr.length+"---"+fileName)
-
-		  //           //_this.writeFile(fileName,data)
-
-
-		  //           fileListArr.push(obj)
-
-		  //           //console.log("fileCurrent:"+fileListArr.length)
-		            
-
-
-				// })
-
 	        }
 	    
 	    }//end eachFolder
