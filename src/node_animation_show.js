@@ -20,6 +20,7 @@ var timeFormatStr = new Date().format("yyyyMMdd-hhmmss")
 var version = "3.0.0"
 var firstSummay = "cb create "+timeFormatStr
 var dirName = 'public_compress'
+var distFileName = 'pub_cartoon_v'
 var options = {
 	workPath : "./../../mywork/animation_show/assets/",
 	jsListArr : [
@@ -45,10 +46,11 @@ function init(){
 		codeString += fileData
 	}
 
+	//-----------––
 
 	var resultCode = "/* "+firstSummay+" */" + codeString
-	var distPath = ""+mainPath+dirName+"/"+dirName+"_"+version+".js"
-	file.save(codeString, distPath, ()=>{
+	var distPath = ""+mainPath+dirName+"/"+distFileName+version+".min.js"
+	file.save(resultCode, distPath, ()=>{
 		Q.log("完成 "+distPath)
 	})
 
@@ -62,20 +64,7 @@ function getFileData(filePath){
 }
 
 function uglifyJsFun(codeString){
-	// var options = {
-	//     toplevel: true,
-	//     compress: {
-	//         global_defs: {
-	//             "@console.log": "alert"
-	//         },
-	//         passes: 2
-	//     },
-	//     output: {
-	//         beautify: false,
-	//         preamble: "/* "+uglified+" */"
-	//     }
-	// }
-	return UglifyJs.minify(codeString,{}).code
+	return UglifyJs.minify(codeString).code
 }
 
 
