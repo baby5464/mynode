@@ -387,30 +387,22 @@ class QtFile
 		//console.log( pathUrl )
 
 		var pathObj = path.parse(pathUrl)
-		var fileDirPath = pathObj.dir
-		console.log( "pathUrl" )
-		console.log( pathObj.dir )
-
 		var isHaveFolder = this.exist(pathObj.dir)
-		console.log( isHaveFolder )
-
 		if(!isHaveFolder){
-			fs.mkdirSync(fileDirPath);
+			fs.mkdirSync(pathObj.dir);
 		}
-
-
-		//
-		// var fileFolderName = path.dirname(pathUrl)
-		// var fileName = path.basename(pathUrl)
-		// var siff = path.extname(pathUrl)
-		// fs.writeFile(
-		// 	pathUrl,
-		// 	fileData,
-		// 	function (err) {
-		// 		callBack()
-		// 		console.log("[save file]:"+pathUrl)
-		// 	}
-		// )
+		
+		var fileFolderName = path.dirname(pathUrl)
+		var fileName = path.basename(pathUrl)
+		var siff = path.extname(pathUrl)
+		fs.writeFile(
+			pathUrl,
+			fileData,
+			function (err) {
+				callBack()
+				console.log("[save file]:"+pathUrl)
+			}
+		)
 	}
 
 	
