@@ -16,7 +16,7 @@ var timeFormatStr = new Date().format("yyyyMMdd-hhmmss")
 //--------------------------------
 
 var mp3FolderPath = "./../../mp3/"
-//var mp3FolderPath = "./../../racer/"
+//
 
 // var isExist = file.exist(mp3FolderPath)
 // Q.log(isExist)
@@ -41,15 +41,18 @@ var mp3FolderPath = "./../../mp3/"
 // Q.log("--------------------")
 
 
+var animationShowFolderPath = "./../../mp3/"
+var animationShowFolderPath = "./../../mywork/animation_show/assets/js"
+
 //获取 全部 文件名 路径数组
-var folderAllFileNameArr = file.getFolderInFolderAllFilesName(mp3FolderPath)
+var folderAllFileNameArr = file.getFolderInFolderAllFilesName(animationShowFolderPath)
 Q.log(folderAllFileNameArr)
 
 
-var saveTxtStr = folderAllFileNameArr
-file.save(JSON.stringify(saveTxtStr), "./../../mynode/dist/dist.txt", ()=>{
-	Q.log(saveTxtStr)
-})
+// var saveTxtStr = folderAllFileNameArr
+// file.save(JSON.stringify(saveTxtStr), "./../../mynode/dist/dist.txt", ()=>{
+// 	Q.log(saveTxtStr)
+// })
 
 
 

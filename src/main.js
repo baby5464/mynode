@@ -44,6 +44,7 @@ function promiseGetWebDom(webUrlPath, characterStr){
 		function catchHandler(htmlDom){
 			var $ = getWebSiteDomObj.parseDom(htmlDom)
 			Q.log("-------------------")
+			Q.log(htmlDom.length)
 			Q.log(webUrlPath)
 			Q.log($('title').text())
 			resolve($)
