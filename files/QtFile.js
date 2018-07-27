@@ -241,46 +241,29 @@ class QtFile
 	
 	*/
 	getOneFolderFilesName(path) {
-
 		var _this = this
 		if (!this.exist(path)) {
 			//空文件夹
 			console.log("[===Not find file or folder====]\n"+path)
 			return
 		}
-
 		var fileNameArr = []
-
 		var fs = require('fs')
 	    var files = fs.readdirSync(path)
-
 	    var fileTotal = files.length
-
-	    //console.log("fileTotal-----:"+fileTotal)
-
 	    files.forEach(eachFolder)
-	    //
 	    function eachFolder(fileName){
 	    	var pathStr = path + '/' + fileName
 	    	var states = fs.statSync(pathStr)
 	    	if (states.isDirectory()) {
-	            //folderTotal++
-	    		//_this.readFolder(pathStr)
+	            
 	        }else{
-
 	        	if (typeof pathStr === 'string'){
 	        		fileNameArr.push(pathStr)
 	        	}
-
 	        }
-	    
-	    }//end eachFolder
-	    //
-
-
+	    }
 	    return fileNameArr
-
-	    
 	}
 
 
@@ -359,13 +342,11 @@ class QtFile
 		var fs = require('fs')
 		//var pathObj = path.parse(pathUrl)
 		//console.log( pathObj )
-
 		var pathObj = path.parse(pathUrl)
 		var isHaveFolder = this.exist(pathObj.dir)
 		if(!isHaveFolder){
 			fs.mkdirSync(pathObj.dir);
 		}
-		
 		var fileFolderName = path.dirname(pathUrl)
 		var fileName = path.basename(pathUrl)
 		var siff = path.extname(pathUrl)
