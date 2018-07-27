@@ -149,17 +149,14 @@ class QtFile
 
 	}
 
-	isDirectory( pathStr ){
+	isDirectory( pathUrl ){
 		var _this = this
-		if (!this.exist(pathStr)) {
-			//空文件夹
-			console.log("[===Not find file or folder====]\n"+pathStr)
-			return
-		}
 		try{
-			var fs = require('fs'); 
-			var states = fs.statSync(pathStr)
-			states.isDirectory()
+			var path = require('path')
+			var pathObj = path.parse(pathUrl)
+			if(pathObj.ext!=""){
+				return false
+			}
 		}catch(e){
 			return false;
 		}
@@ -323,15 +320,14 @@ class QtFile
 		return fileNameStr.substring(0,fileNameStr.length-1).split(",")
 	}
 
-
-
+	
 	//写入文件utf-8格式 
 	//_this.writeFile(fileName,data)
 	writeFile(fileName, data) {
 		var fs = require('fs')
 	    fs.writeFile(fileName, data, 'utf-8', complete);
 	    function complete() {
-	        console.log(fileName+"-文件生成成功");
+	        console.log(fileName+"-文件生成成功")
 	    }
 	}
 
@@ -365,5 +361,8 @@ class QtFile
 	
 
 }
+
+
+
 
 module.exports = QtFile;
