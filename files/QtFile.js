@@ -377,26 +377,40 @@ class QtFile
 
 
 	//save file to path
-	save(__fileContent, __path, __callBackFun){
+	save(fileData, pathUrl, callBack){
 		var path = require('path')
 		var fs = require('fs')
-		//获取路径：path.dirname(__path)
-		//获取文件名：path.basename(__path)
-		//获取扩展名：path.extname(__path)
-		//console.log( path.dirname(__path) )
-		//console.log( __path )
+		//获取路径：path.dirname(pathUrl)
+		//获取文件名：path.basename(pathUrl)
+		//获取扩展名：path.extname(pathUrl)
+		//console.log( path.dirname(pathUrl) )
+		//console.log( pathUrl )
+
+		var pathObj = path.parse(pathUrl)
+		var fileDirPath = pathObj.dir
+		console.log( "pathUrl" )
+		console.log( pathObj.dir )
+
+		var isHaveFolder = this.exist(pathObj.dir)
+		console.log( isHaveFolder )
+
+		if(!isHaveFolder){
+			fs.mkdirSync(fileDirPath);
+		}
+
+
 		//
-		var fileFolderName = path.dirname(__path)
-		var fileName = path.basename(__path)
-		var siff = path.extname(__path)
-		fs.writeFile(
-			__path,
-			__fileContent,
-			function (err) {
-				__callBackFun()
-				console.log("[save file]:"+__path)
-			}
-		)
+		// var fileFolderName = path.dirname(pathUrl)
+		// var fileName = path.basename(pathUrl)
+		// var siff = path.extname(pathUrl)
+		// fs.writeFile(
+		// 	pathUrl,
+		// 	fileData,
+		// 	function (err) {
+		// 		callBack()
+		// 		console.log("[save file]:"+pathUrl)
+		// 	}
+		// )
 	}
 
 	
