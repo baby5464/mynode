@@ -51,7 +51,7 @@ Date.prototype.format = function(format){
 /*
 传入毫秒值，格式化时间
 */
-Date.prototype.formatTime = function(mss){
+Date.prototype.formatMMTime = function(mss){
     var days = parseInt(mss / (1000 * 60 * 60 * 24));
     var hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));

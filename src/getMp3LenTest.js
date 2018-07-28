@@ -38,7 +38,7 @@ function init(){
 		if(pathObj.ext === '.mp3'){
 			var buffer = file.readFileSync(mp3Name)
 			var duration = getMP3Duration(buffer)
-			var mp3TimeFormatStr = new Date().formatTime(duration)
+			var mp3TimeFormatStr = new Date().formatMMTime(duration)
 			var mp3Obj = {
 				fileName:pathObj.name+pathObj.ext,
 				path:mp3Name,
@@ -53,6 +53,7 @@ function init(){
 	var jsonString = JSON.stringify({data:mp3DataArr,mp3Total:mp3DataArr.length})
 	var distNameStr = "dist_"+timeFormatStr+".json"
 	var distPath = "./../../mynode/dist/"+distNameStr
+
 	file.save(jsonString, distPath, ()=>{
 		Q.log(jsonString)
 	})
