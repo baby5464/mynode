@@ -29,6 +29,8 @@ var webUrlPath5 = 'http://www.people.com.cn'
 
 var fileContent = timeFormatStr+" qiter text";
 var distPath = "./../dist/q-"+timeFormatStr+".txt";
+
+
 //保存文件函数
 //file.save(fileContent, distPath, function(){
 //	Q.log("ok");
@@ -71,17 +73,3 @@ promiseGetWebDom(webUrlPath, 'UTF8')
 })
 
 
-
-/*
-fs.readFile("./../files/QtFile.js", (error, data) => {
-
-
-	var data = iconv.decode(Buffer.from(data), 'GBK');
-	Q.log(data);
-
-	file.save(data, "f.js", function(){
-		Q.log("ok");
-	})	
-
-})
-*/

@@ -41,8 +41,6 @@ var mp3FolderPath = "./../../mp3/"
 // Q.log("--------------------")
 
 
-var mp3FolderPath = "./../../mp3/"
-
 //获取 全部 文件名 路径数组
 var folderAllFileNameArr = file.getFolderInFolderAllFilesName(mp3FolderPath)
 Q.log(folderAllFileNameArr)
