@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>postTest</title>
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+</head>
+<body>
+	postTest
+
+	<button id="postBtn">发送数据</button>
+	
+	<div id="main"></div>
+<script>
+
+	$(document).ready(function(){
+
+
+
+	  $("#postBtn").click(function(){
+	    var rnd = Math.random()
+	   	var urlPath = 'http://localhost:3000/getpost'
+	   	var urlPath = 'http://localhost:3000/upload'
+	   	var data = {
+	   		id:rnd,
+	   		type:"post",
+	   		imageUrl:"https://open-image.nosdn.127.net/252d0a7a4c2c4506aa9c7d6985bb0e00.jpg"
+	   	}
+
+
+	   	$.post(urlPath, data, function(returnData) {
+	   		var dat = returnData;
+	   		var obj = JSON.parse(dat)
+		  	console.log("返回数据对象")
+		  	console.log(obj)
+
+		});
+
+
+
+
+
+	  });
+
+	});
+	  
+</script>
+</body>
+</html>

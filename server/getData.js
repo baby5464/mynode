@@ -6,15 +6,25 @@ var fs = require('fs');
 var path = require('path');
 //导入querystring模块（解析post请求数据）
 var querystring = require('querystring');
-
+//
+var url = require('url');
 //2.创建服务器
 var app = http.createServer();
 
 //3.添加响应事件
 app.on('request', function (req, res) {
 
-    console.log("req.method");
-    console.log(req.headers.referer);
+    var pathname = url.parse(req.url).pathname;
+    console.log("pathname----:"+pathname)
+    
+    
+    console.log("url")
+    console.log(url)
+
+    
+
+    //console.log("req.method");
+    //console.log(req.headers.referer);
 
     //1.通过判断url路径和请求方式来判断是否是表单提交
     if (req.url === '/heroAdd' && req.method === 'POST') {
