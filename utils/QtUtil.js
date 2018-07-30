@@ -3,6 +3,7 @@
 
 class Q
 {
+    
 	constructor(){
 	
 	}
@@ -19,6 +20,9 @@ class Q
 		//this.para = name;
 		return "Hello,"+name;
 	}
+
+
+    
 }
 
 module.exports = Q;

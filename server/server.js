@@ -35,22 +35,31 @@ function serverStart(route, handler, requestHandlers){
 	      	res.write('<h1>Node.js</h1><span>'+timeFormatStr+'</span>');  
 	      	res.end("");
 	    }
-	    else if(pathname=="/getpost" && req.method.toLowerCase() === 'post')	//处理post方式请求
+	    else if(pathname=="/postdata" && req.method.toLowerCase() === 'post')	//处理post方式请求
 	    {
 	    	
-	    	console.log("-----这里面就是getpost-----")
+	    	route(handler, pathname, res, req);
 
 	    }else if(pathname == "/upload" && req.method.toLowerCase() === 'post'){
-	    	//日期输出函数
-			var timeFormatStr = new Date().format("yyyyMMdd-hhmmss")
-	        var pathname = url.parse(req.url).pathname;
+
+
+
+
+			route(handler, pathname, res, req);
+	        
+	        	
+
+
+	    }else if(pathname == "/upfile" && req.method.toLowerCase() == 'post'){
+
+
+
 
 	        route(handler, pathname, res, req);
-	        	
-	    	console.log("这里面就是upload")
+	        
 
 	    }
-	    console.log('pathname:'+pathname);
+	    //console.log('pathname:'+pathname);
 
 
     })

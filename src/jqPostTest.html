@@ -5,7 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>postTest</title>
 <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-
+<style>
+	.file-box {
+	    position: relative;
+	    display: inline-block;
+	}
+	.file-box img {
+	    width: 50px;
+	    height: 50px;
+	    border-radius: 50%;
+	    position: absolute;
+	    top: -30px;
+	    left: 0;
+	    display: inline-block;
+	    border: none;
+	}
+	.file-box .txt,.file-box .file {
+	    width: 70px;
+	    height: 36px;
+	    position: absolute;
+	    top: -20px;
+	    left: 100px;
+	    text-align: center;
+	}
+	</style>
 </head>
 <body>
 	postTest
@@ -13,16 +36,27 @@
 	<button id="postBtn">发送数据</button>
 	
 	<div id="main"></div>
+
+	<div id="myupload">
+		
+		<form enctype="multipart/form-data" method="post">
+			<input type="file" id="uploadFile" runat="server" />
+			<input type="button" id="btnUpload" value="确定" />
+			<div id="imgDiv">
+			</div>
+		</form>
+	</div>
+
 <script>
 
 	$(document).ready(function(){
 
-
+		var urlPath = 'http://localhost:3000/postdata'
+	   //var urlPath = 'http://localhost:3000/upload'
 
 	  $("#postBtn").click(function(){
 	    var rnd = Math.random()
-	   	var urlPath = 'http://localhost:3000/getpost'
-	   	var urlPath = 'http://localhost:3000/upload'
+	   	
 	   	var data = {
 	   		id:rnd,
 	   		type:"post",
@@ -39,10 +73,57 @@
 		});
 
 
-
-
-
 	  });
+
+	  //--------------------------
+	  var upfileUrlPath = 'http://localhost:3000/upfile'
+		
+
+	  $("#btnUpload").click(function(){
+	  	uploadImage() 
+	  })
+
+		function uploadImage() {
+        	//判断是否有选择上传文件
+            var imgPath = $("#uploadFile").val();
+
+            if (imgPath == "") {
+                //alert("请选择上传图片！");
+                return;
+            }
+            //判断上传文件的后缀名
+            var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
+            if (strExtension != 'jpg' && strExtension != 'gif'
+            && strExtension != 'png' && strExtension != 'bmp') {
+                //alert("请选择图片文件");
+                return;
+            }
+
+            var csrf = $("input[name='filename']").val();
+            var formData=new FormData();
+    		formData.append("filename",csrf);
+    		formData.append('pic', $("#uploadFile")[0].files[0]); 
+            $.ajax({
+                type: "POST",
+                url: upfileUrlPath,
+                data: formData,
+                contentType: false,
+          		processData: false,
+                success: function(data) {
+                    //alert("上传成功");
+                    $("#imgDiv").empty();
+                    //$("#imgDiv").html(data);
+                    $("#imgDiv").show();
+
+                    console.log(data)
+
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    //alert("上传失败，请检查网络后重试");
+                }
+            });
+        }
+	  //--------------------------
 
 	});
 	  
