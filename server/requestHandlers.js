@@ -134,8 +134,6 @@ function upfile(res, req){
     var QtFile = require('./../files/QtFile.js')
     var file = new QtFile()
 
-
-
     if (req.url == '/upfile' && req.method.toLowerCase() == 'post') {
 
         var form = new formidable.IncomingForm();
@@ -152,7 +150,7 @@ function upfile(res, req){
             keys.forEach(function(key){
                 var filePath = files[key].path
                 var fileExt = filePath.substring(filePath.lastIndexOf('.'))
-                if (('.jpg.jpeg.png.gif').indexOf(fileExt.toLowerCase()) === -1) {
+                if (('.jpg.jpeg.png.gif.mp4').indexOf(fileExt.toLowerCase()) === -1) {
                     errCount += 1
                 } else {
                     //以当前时间戳对上传文件进行重命名
@@ -160,11 +158,35 @@ function upfile(res, req){
                     var targetFile = path.join(distPathSaveImg, fileName)
                     //移动文件
                     fs.renameSync(filePath, targetFile)
-                    //获取图片宽高
-                    var dimensions = sizeOf(targetFile)
-                    //{ width: 256, height: 256, type: 'png' }
-                    // 文件的Url（相对路径）
-                    filesUrl.push({picUrl:targetFile,fileObj:files[key],imageSize:dimensions})
+                    
+
+                    if(fileExt.toLowerCase()===".mp4"){
+
+                        var ffmpeg = require('./../src/node_modules/fluent-ffmpeg');
+                        var command = ffmpeg(targetFile);
+                        ffmpeg(targetFile)
+                          .on('filenames', function(filenames) {
+                            console.log('Will generate ' + filenames.join(', '))
+                          })
+                          .on('end', function() {
+                            console.log('Screenshots taken');
+                          })
+                          .screenshots({
+                            // Will take screens at 20%, 40%, 60% and 80% of the video
+                            count: 4,
+                            folder: distPathSaveImg
+                          });
+
+
+                        filesUrl.push({picUrl:targetFile,fileObj:files[key],imageSize:{}})
+                    }else{
+                        //获取图片宽高
+                        var dimensions = sizeOf(targetFile)
+                        //{ width: 256, height: 256, type: 'png' }
+                        // 文件的Url（相对路径）
+                        filesUrl.push({picUrl:targetFile,fileObj:files[key],imageSize:dimensions})
+                    }
+                    
 
                 }
             })
