@@ -4,6 +4,7 @@
 # myNode
 
 - 学习测试nodejs代码
+- node web服务 接收get post参数等等
 - 测试nodejs简单爬虫 node http模块
 - 遍历文件夹列表（区分文件夹，文件，判断文件类型） 
 - 遍历文件夹中，全部文件夹内的文件，输出文件名 数组 
