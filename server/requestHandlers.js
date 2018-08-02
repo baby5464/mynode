@@ -179,9 +179,6 @@ function upfile(res, req){
                     
                     if(fileExt.toLowerCase() === ".mp3"){
 
-                        //var data = fs.readFileSync(targetFile)
-                        //Q.log(data)
-                        //return
                         
                         mm.parseFile(targetFile, {native: true})
                           .then(function (metadata) {
@@ -220,13 +217,6 @@ function upfile(res, req){
                             console.error(err.message)
                           })
                         
-
-                        /*
-                         var fileObj = file.getFileStatSync(targetFile)
-                         var fileBufferData = file.readFileSync(targetFile)
-                         Q.log(fileObj.size)
-                        */
-
 
                         
                         

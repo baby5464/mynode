@@ -11,3 +11,4 @@ $ cat .gitignore
 tmp/**/* 
 
 src/node_modules/**/*
+dist/**/*
