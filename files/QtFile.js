@@ -118,11 +118,14 @@ class QtFile
 		var fs = require('fs');
 		return fs.readFileSync(path);
 	}
-	
+	readFileBufferSync(path){
+		var fs = require('fs');
+		return fs.readFileSync(path,{encoding:'binary'})
+	}
 
 	getFileStatSync( pathStr ){
 		var _this = this
-		if (!this.isDirectory(pathStr)) {
+		if (this.isDirectory(pathStr)) {
 			return
 		}
 		//------------------

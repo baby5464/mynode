@@ -125,8 +125,15 @@ function upload(res, req){
 
 function upfile(res, req){
 
+    //iconv-lite mp3-header fluent-ffmpeg formidable image-size music-metadata
+
+    var mm = require('./../src/node_modules/music-metadata');
+
+    var ffmpeg = require('./../src/node_modules/fluent-ffmpeg')
     var sizeOf = require('./../src/node_modules/image-size')
     var formidable = require('./../src/node_modules/formidable')
+    var iconv = require('./../src/node_modules/iconv-lite')
+    var child = require('child_process');
     var fs = require('fs')
     var http = require('http')
     var path = require('path')
@@ -143,59 +150,150 @@ function upfile(res, req){
 
         form.parse(req, function(err, fields, files) {
 
-            var distPathSaveImg = "./../src/images/"
+            var dateString = new Date().format("yyyyMMdd-hhmmssS")
+            var distPathSaveImg = "./../dist/"+dateString+"/"
+            //
+            var isHaveFolder = file.exist(distPathSaveImg)
+            if(!isHaveFolder){
+                fs.mkdirSync(distPathSaveImg);
+            }
+
             var filesUrl = []
             var errCount = 0
             var keys = Object.keys(files)
             keys.forEach(function(key){
                 var filePath = files[key].path
                 var fileExt = filePath.substring(filePath.lastIndexOf('.'))
-                if (('.jpg.jpeg.png.gif.mp4').indexOf(fileExt.toLowerCase()) === -1) {
+                if (('.jpg.jpeg.png.gif.mp4.mp3').indexOf(fileExt.toLowerCase()) === -1) {
                     errCount += 1
+
+                    filesUrl[0] = {picUrl:"",fileObj:files[key],imageSize:{}}
+
                 } else {
                     //以当前时间戳对上传文件进行重命名
-                    var fileName = new Date().getTime() + fileExt
+                    
+                    var fileName = "upload_"+ dateString + fileExt
                     var targetFile = path.join(distPathSaveImg, fileName)
-                    //移动文件
+                    //移动文件 
                     fs.renameSync(filePath, targetFile)
                     
+                    if(fileExt.toLowerCase() === ".mp3"){
 
-                    if(fileExt.toLowerCase()===".mp4"){
+                        //var data = fs.readFileSync(targetFile)
+                        //Q.log(data)
+                        //return
+                        
+                        mm.parseFile(targetFile, {native: true})
+                          .then(function (metadata) {
 
-                        var ffmpeg = require('./../src/node_modules/fluent-ffmpeg');
-                        var command = ffmpeg(targetFile);
-                        ffmpeg(targetFile)
-                          .on('filenames', function(filenames) {
-                            console.log('Will generate ' + filenames.join(', '))
+                            var o = util.inspect(metadata, { showHidden: false, depth: null })
+                            //console.log(metadata.common.title);
+
+                            var titleStr = metadata.common.title
+                            var titleStr = iconv.decode(titleStr, 'gbk')
+                            var albumartist = metadata.common.albumartist
+                            var albumartist = iconv.decode(albumartist, 'gbk')
+                            var album = metadata.common.album
+                            var album = iconv.decode(album, 'gbk')
+                            var artist = metadata.common.artist
+                            var artist = iconv.decode(artist, 'gbk')
+
+                            console.log(titleStr)
+                            console.log(albumartist)
+                            console.log(album)
+                            console.log(artist)
+
+
+                            var dataInfo = {
+                                title:titleStr,
+                                albumartist:albumartist,
+                                album:albumartist,
+                                artist:albumartist
+                            }
+
+                            var dataObj = {type:"audio",picUrl:targetFile,fileObj:files[key],dataInfo:dataInfo};
+                            var jsonString = JSON.stringify(dataObj)
+                            writeEnd(jsonString, errCount)
+
                           })
-                          .on('end', function() {
-                            console.log('Screenshots taken');
+                          .catch(function (err) {
+                            console.error(err.message)
                           })
-                          .screenshots({
-                            // Will take screens at 20%, 40%, 60% and 80% of the video
-                            count: 4,
-                            folder: distPathSaveImg
-                          });
+                        
+
+                        /*
+                         var fileObj = file.getFileStatSync(targetFile)
+                         var fileBufferData = file.readFileSync(targetFile)
+                         Q.log(fileObj.size)
+                        */
 
 
-                        filesUrl.push({picUrl:targetFile,fileObj:files[key],imageSize:{}})
-                    }else{
+                        
+                        
+                        
+                    }else if(fileExt.toLowerCase()===".mp4" || fileExt.toLowerCase()===".mov"){
+
+                        //截图---------------
+                        var screenshotName = "screenshot_" + dateString
+                        var screenshotNamePath = distPathSaveImg + screenshotName+'.jpg'
+                        var ffmpeg_screen = 'ffmpeg -i '+targetFile+' -ss 00:00:00 -f image2 '+screenshotNamePath
+                        //截图功能
+                        
+                        child.exec(ffmpeg_screen,()=>{
+                             console.log("截图 ok")
+                        })
+                        
+                        //转换视频功能---------------
+                        // var outputMp3Path = distPathSaveImg+'output_'+dateString+'.mp4'
+                        // ffmpeg(targetFile)
+                        //   .videoCodec('libx264')
+                        //   //.audioCodec('libmp3lame')
+                        //   .audioCodec('copy')
+                        //   .size('320x240')
+
+                        //   .on('error', function(err) {
+                        //     console.log('An error occurred: ' + err.message)
+                        //   })
+                        //   .on('end', function() {
+                            
+                        //     console.log('Processing finished !')
+                        //   })
+                        //   .save(outputMp3Path)
+                          //--------------------
+
+                        var dataObj = {type:"video",picUrl:targetFile,fileObj:files[key],imageSize:{}}
+
+                        var jsonString = JSON.stringify(dataObj)
+
+                        writeEnd( jsonString, errCount)
+                    }else if('.jpg.jpeg.png.gif'.indexOf(fileExt.toLowerCase()) != -1){
+
+
                         //获取图片宽高
                         var dimensions = sizeOf(targetFile)
-                        //{ width: 256, height: 256, type: 'png' }
-                        // 文件的Url（相对路径）
-                        filesUrl.push({picUrl:targetFile,fileObj:files[key],imageSize:dimensions})
+                        var dataObj = {type:"pic",picUrl:targetFile,fileObj:files[key],imageSize:dimensions}
+                        
+                        var jsonString = JSON.stringify(dataObj)
+
+                        writeEnd(jsonString, errCount)
                     }
                     
 
                 }
             })
 
-            var jsonString = JSON.stringify({
-                pic:filesUrl[0].picUrl,
-                picSize:filesUrl[0].imageSize,//{ width: 256, height: 256, type: 'png' }
-                code:filesUrl[0].fileObj.size
-            })
+
+            
+        });
+
+
+
+      }
+    
+
+
+    function writeEnd( jsonString, errCount){
+
 
             var errorJson = JSON.stringify({
                 code:"1",
@@ -209,17 +307,12 @@ function upfile(res, req){
                 resultJson = errorJson
             }
 
-            var headerInfo = {'content-type': 'text/plain',"Access-Control-Allow-Origin":"*"}
+            var headerInfo = {'content-type': 'text/plain; charset=utf-8',"Access-Control-Allow-Origin":"*"}
             res.writeHead(200, headerInfo)
             res.write(resultJson)
             //res.end(util.inspect({fields: fields, files: files}));
             res.end()
-        });
-
-
-
-      }
-    
+    }
 
     return "hello upfile!";
 }
