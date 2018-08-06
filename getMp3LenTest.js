@@ -22,6 +22,7 @@ var getMP3Duration = require('get-mp3-duration')
 //--------------------------
 
 var mp3FolderPath = "./../mp3/"
+var mp3FolderPath = "./../mp3/dgg02/"
 //var mp3FolderPath = "./../mp3/jpg/"
 //获取 全部 文件名 路径数组
 
@@ -33,10 +34,9 @@ var mp3DataArr = []
 
 
 
-init()
+//init()
 
-
-//rename()
+rename()
 
 function init(){
 	var id = 0
@@ -84,17 +84,43 @@ function init(){
 
 function rename(){
 
+
+	var signStr = "(第二部)"
+
+
 	for(var i in folderAllFileNameArr){
 		var mp3Path = folderAllFileNameArr[i]
 		var pathObj = path.parse(mp3Path)
 		var ext = pathObj.ext
 		var oldName = pathObj.name
 		if(ext!=''){
+
+			var newPath = i
+			var buffer = file.readFileSync(mp3Path)
+			var duration = getMP3Duration(buffer)
+			var mp3TimeFormatStr = new Date().formatMMTime(duration)
+
+
+
 			var timeFormatStr = new Date().format("yyyyMMdd-hhmmss")+"_"
 			var newPath = pathObj.dir+"/dist/"+i+ext
-			file.copyFile(mp3Path, newPath)
-			//file.renameSync(mp3Path, newPath)
+			//file.copyFile(mp3Path, newPath)
+			//Q.log(mp3Path)
+
+			var mp3Title = pathObj.name.split(signStr)[1];
+			var mp3Title = mp3Title.split("-")[0];
+			Q.log(mp3Title)
 		}
 	}
+
+
+	// var timeFormatStr = new Date().format("yyyyMMdd-hhmmss")
+	// var jsonString = JSON.stringify({data:mp3DataArr,mp3Total:mp3DataArr.length})
+	// var distNameStr = "dist_"+timeFormatStr+".json"
+	// var distPath = "dist/"+distNameStr
+
+	// file.save(jsonString, distPath, ()=>{
+	// 	//Q.log(jsonString)
+	// })
 
 }
