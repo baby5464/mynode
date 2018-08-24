@@ -2,14 +2,19 @@
 
 使用方法
 
-var iconv = require('iconv-lite');
-var QtFile = require('./../files/QtFile.js');
-var file = new QtFile();
-var bufferdata = file.readFileSync("./../dist/q.txt");
-var data = iconv.decode(Buffer.from(bufferdata), 'GBK');
+var iconv = require('iconv-lite')
+var QtFile = require('./../files/QtFile.js')
+var file = new QtFile()
+var bufferdata = file.readFileSync("./../dist/q.txt")
+var data = iconv.decode(Buffer.from(bufferdata), 'GBK')
 Q.log(data);
 
 
+//-------------------------------
+// 读取文件
+var bufferdata = file.readFileSync("./../mp3/list.txt")
+var data = iconv.decode(Buffer.from(bufferdata), 'UTF8')
+Q.log(data)
 //-------------------------------
 
 功能：检测路径 是否是文件夹
